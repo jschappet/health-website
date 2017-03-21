@@ -2,11 +2,28 @@
 var dataCurrentWeight = [];
 var db ;
 var tableData = [];
+var vitals = [];
 
 
 var size = 250;
 
 var smallSize = (size * .50);
+
+function updateVitals(year) {
+        db.query('vitals/vitals-per-month', {
+         startkey: year+"-" ,
+         endkey: year+"-\uffff" 
+        }).then(function (res) {
+                 $.each( res.rows, function(key, row  ) {
+                   vitals.push({
+                            "id": row.id,
+                            "sys": row.value.systolic,
+                            "dia": row.value.diatolic
+                        });
+
+                });
+	});
+}
 
 
 function updateTable() {
@@ -77,8 +94,17 @@ function string2Hex(tmp) {
     return str;
 }
 
-$('#loginSubmit').click( function () {
 
+
+function initDisplay() {
+  	updateTable();
+	updateLatestWeight(); 
+	weightGraph();
+	$('#loginForm').html("<a href='/' id='signOut' class='btn btn-success' onClick='signOut()'>Sign out</a>");
+	
+}
+
+$('#loginSubmit').click( function () {
 	var hexVal =  string2Hex(loginForm.user.value);
 	var user = {
 	  name: loginForm.user.value,
@@ -93,10 +119,6 @@ $('#loginSubmit').click( function () {
 		Cookies.set('remoteDb',remoteDbUrl);
 	});
 
-  	updateTable();
-	updateLatestWeight(); 
-
-	$('#loginForm').html("<a href='/' id='signOut' class='btn btn-success' onClick='signOut()'>Sign out</a>");
 	return false;
 });
 
@@ -118,10 +140,7 @@ function initDb() {
 		// response.userCtx.name is the current user
 			console.log("current user: " +  response.userCtx.name );
 			 loggedIn = true;
-			$('#loginForm').html("<a href='/'  id='signOut' class='btn btn-success'  onClick='signOut()'>Sign out</a>"); 
-			updateTable();
-			updateLatestWeight();
-			weightGraph();
+			 initDisplay();
 		}
 		});
 	}
@@ -132,14 +151,14 @@ initDb()
 
 
 function weightGraph() {
-if (dataCurrentWeight.lenght == 0 ) { return }
+  if (dataCurrentWeight.lenght == 0 ) { return }
 
-c3.generate({
+  c3.generate({
 	 size: {
 	        height: smallSize
 	    },
-   bindto: '#last5',
-   data: {
+    bindto: '#last5',
+    data: {
        x: 'monthYear',
        json: dataCurrentWeight,
        axes: {
@@ -150,7 +169,7 @@ c3.generate({
          x: 'date', // it's possible to specify 'x' when category axis
          value: [ 'value', ],
      }
- },
+  },
 	axis: {
 	    x: {
 	        label: 'Date',
@@ -163,7 +182,7 @@ c3.generate({
 	        label: 'Current Weight',
 	    }
 	}
-});
+ });
 }
 
 function updateLatestWeight() {
@@ -184,4 +203,20 @@ function updateLatestWeight() {
 
 
 }
+
+var tablist = ["#home","#weight", "#messages","#vitals"];
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+  $.each(tablist, function (item) {
+    // console.log(tablist[item]);
+     $(tablist[item]).addClass("fade");
+     $(tablist[item]).removeClass("active");
+     $(tablist[item]).removeClass("active in");
+  });
+  var target = $(e.target).attr("href") // activated tab
+  $(target).addClass("active");
+  $(target).addClass("in");
+  
+});
+
 	

@@ -1,8 +1,8 @@
-.nav-tabs li {
+.nav-tabs li img {
     display:none;
 }
 
-.nav-tabs li.active {
+.nav-tabs li.active img {
     display:block;
 }
 

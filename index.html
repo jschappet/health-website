@@ -60,24 +60,29 @@
       <div class="container">
 
 
-<ul class="nav nav-tabs">
-  <li role="presentation" class="active"><a href="#">Home</a></li>
-  <li role="presentation"><a href="#">Profile</a></li>
-  <li role="presentation"><a href="#">Messages</a></li>
-</ul>
+<div>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Health Summary</a>
+    </li>
+    <li role="presentation">
+      <a href="#weight" aria-controls="profile" role="tab" data-toggle="tab">Weight</a>
+    </li>
+    <li role="presentation">
+      <a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a>
+    </li>
+    <li role="presentation">
+      <a href="#settings" aria-controls="vitals" role="tab" data-toggle="tab">Vitals</a>
+    </li>
+  </ul>
 
-
-<!-- Tab panes -->
+  <!-- Tab panes -->
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="home">Content Home</div>
-    <div role="tabpanel" class="tab-pane" id="profile">Content Profile</div>
-    <div role="tabpanel" class="tab-pane" id="messages">Content Messages</div>
-    <div role="tabpanel" class="tab-pane" id="settings">Content Settings</div>
-  </div>
+    <div role="tabpanel" class="tab-pane active" id="home">
 
 
-
-	<h1>Heath Summary</h1>
+        <h1>Heath Summary</h1>
         <p>Below is a summary of the last 15 weeks. Average Weight, Blood Pressure, and Heart Rate, and Total Steps</p>
         <h3>Weight Last 15 Weeks</h3>
         <div id="last5"></div>
@@ -85,6 +90,17 @@
   <table id="table"></table>
       </div>
     </div>
+
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="weight">Content Weight</div>
+    <div role="tabpanel" class="tab-pane fade" id="messages">Content Messages</div>
+    <div role="tabpanel" class="tab-pane fade" id="vitals">Content Vitals</div>
+  </div>
+
+</div>
+
+
+
 
     <div class="container">
       <footer>
