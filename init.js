@@ -45,12 +45,18 @@ function updateTable() {
 
 }
 
-$('#signOut').click( function () {
-	console.log("here");
- 	$('#table').html();
+function signOut() {
+	var logout = db.logout(function (err, response) {
+	if (err) {
+		console.log(err);
+	}	else {	
+		console.log(response.ok);
+		Cookie.remove('remoteDb');
+ 		$('#table').html('');
+	}
+	});
 	return false;
-});
-
+}
 
 function string2Hex(tmp) {
     var str = '';
@@ -73,18 +79,18 @@ $('#loginSubmit').click( function () {
 	db = new PouchDB(remoteDbUrl, {skipSetup: true}); //, {
 	db.login(user.name, user.password).then(function (userInfo) {
   		console.log(userInfo);
-		$.cookie('remoteDb',remoteDbUrl);
+		Cookie.set('remoteDb',remoteDbUrl);
 	});
 
   	updateTable();
 
-	$('#loginForm').html("<a href='#' id='signOut' class='btn btn-success'>Sign out</a>");
+	$('#loginForm').html("<a href='#' id='signOut' class='btn btn-success' onClick='signOut()'>Sign out</a>");
 	return false;
 });
 
 
 function isLoggedIn() {
-	var remoteDbUrl = $.cookie('remoteDb');
+	var remoteDbUrl = Cookie.get('remoteDb');
      	console.log(remoteDbUrl);	
  	db = new PouchDB(remoteDbUrl, {skipSetup: true});
 	var loggedIn = false;
@@ -99,7 +105,7 @@ function isLoggedIn() {
     	// response.userCtx.name is the current user
 	console.log("current user: " +  response.userCtx.name );
 	 loggedIn = true;
-        $('#loginForm').html("<a href='#'  id='signOut' class='btn btn-success'>Sign out</a>"); 
+        $('#loginForm').html("<a href='#'  id='signOut' class='btn btn-success'  onClick='signOut()'>Sign out</a>"); 
 	updateTable();
   	}
 	});
