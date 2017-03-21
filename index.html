@@ -8,8 +8,11 @@
     <title>Health Summary</title>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/local.css">
 	<link rel="stylesheet" href="bower_components/bootstrap-table/dist/bootstrap-table.min.css">
-	
+	<!-- Load c3.css -->
+	<link href="bower_components/c3/c3.min.css" rel="stylesheet" type="text/css">
+
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="bower_components/bootstrap-table/dist/bootstrap-table.js"></script>
@@ -17,6 +20,10 @@
 	<script src="bower_components/pouchdb/dist/pouchdb.min.js"></script>
 	<script src="bower_components/pouchdb-authentication/dist/pouchdb.authentication.min.js"></script>
 	<script src="bower_components/js-cookie/src/js.cookie.js"></script>
+
+	<!-- Load d3.js and c3.js -->
+	<script src="bower_components/d3/d3.min.js"></script> 
+	<script src="bower_components/c3/c3.min.js"></script>
   </head>
 <body>
 
@@ -30,8 +37,11 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">Health Data</a>
-        </div>
+	</div>
         <div id="navbar" class="navbar-collapse collapse">
+           <ul class="nav navbar-nav">
+		<li><span id="current_weight">loading</span></li>
+	   </ul>
           <form class="navbar-form navbar-right" name="loginForm" id="loginForm">
             <div class="form-group">
               <input id="user" name="user" type="text" placeholder="Username" class="form-control">
@@ -46,9 +56,31 @@
     </nav>
 
     <div class="jumbotron">
+
       <div class="container">
+
+
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Home</a></li>
+  <li role="presentation"><a href="#">Profile</a></li>
+  <li role="presentation"><a href="#">Messages</a></li>
+</ul>
+
+
+<!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="home">Content Home</div>
+    <div role="tabpanel" class="tab-pane" id="profile">Content Profile</div>
+    <div role="tabpanel" class="tab-pane" id="messages">Content Messages</div>
+    <div role="tabpanel" class="tab-pane" id="settings">Content Settings</div>
+  </div>
+
+
+
 	<h1>Heath Summary</h1>
         <p>Below is a summary of the last 15 weeks. Average Weight, Blood Pressure, and Heart Rate, and Total Steps</p>
+        <h3>Weight Last 15 Weeks</h3>
+        <div id="last5"></div>
 
   <table id="table"></table>
       </div>

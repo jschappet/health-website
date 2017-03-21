@@ -19,12 +19,12 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "^1.6.3",
     "bootstrap-table": "^1.11.1",
     "bootstrap": "^3.3.7",
     "jquery": "^3.1.1",
     "js-cookie": "^2.1.3",
     "pouchdb-authentication": "^0.5.5",
+    "c3": "~0.4.11",
     "pouchdb": "^6.1.2"
   }
 }

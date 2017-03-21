@@ -1,6 +1,13 @@
 
+var dataCurrentWeight = [];
 var db ;
 var tableData = [];
+
+
+var size = 250;
+
+var smallSize = (size * .50);
+
 
 function updateTable() {
 
@@ -11,6 +18,7 @@ function updateTable() {
 	 limit: 15
 	}).then(function (res) {
 		 $.each( res.rows, function(key, row  ) {
+		   dataCurrentWeight.push({"date":row.key,"value":row.value.weight.toFixed(2)});
 		   tableData.push({
 			  "id": row.key,
 			    "weight": row.value.weight.toFixed(2),
@@ -39,6 +47,8 @@ function updateTable() {
 	    }],
 	    data: tableData
 	});
+	dataCurrentWeight = dataCurrentWeight.reverse();
+	weightGraph();	
 	}).catch(function (err) {	
   		console.log(err);
   	});
@@ -51,8 +61,9 @@ function signOut() {
 		console.log(err);
 	}	else {	
 		console.log(response.ok);
-		Cookie.remove('remoteDb');
+		Cookies.remove('remoteDb');
  		$('#table').html('');
+		location.reload();
 	}
 	});
 	return false;
@@ -79,39 +90,98 @@ $('#loginSubmit').click( function () {
 	db = new PouchDB(remoteDbUrl, {skipSetup: true}); //, {
 	db.login(user.name, user.password).then(function (userInfo) {
   		console.log(userInfo);
-		Cookie.set('remoteDb',remoteDbUrl);
+		Cookies.set('remoteDb',remoteDbUrl);
 	});
 
   	updateTable();
+	updateLatestWeight(); 
 
-	$('#loginForm').html("<a href='#' id='signOut' class='btn btn-success' onClick='signOut()'>Sign out</a>");
+	$('#loginForm').html("<a href='/' id='signOut' class='btn btn-success' onClick='signOut()'>Sign out</a>");
 	return false;
 });
 
 
-function isLoggedIn() {
-	var remoteDbUrl = Cookie.get('remoteDb');
+function initDb() {
+	var remoteDbUrl = Cookies.get('remoteDb');
      	console.log(remoteDbUrl);	
- 	db = new PouchDB(remoteDbUrl, {skipSetup: true});
-	var loggedIn = false;
+	if (remoteDbUrl) {
+
+		db = new PouchDB(remoteDbUrl, {skipSetup: true});
 	
-	db.getSession(function (err, response) {
-  	if (err) {
-  		console.log("error");		
-  		console.log(err);		
-	} else if (!response.userCtx.name) {
-		console.log("Not logged in");
-  	} else {
-    	// response.userCtx.name is the current user
-	console.log("current user: " +  response.userCtx.name );
-	 loggedIn = true;
-        $('#loginForm').html("<a href='#'  id='signOut' class='btn btn-success'  onClick='signOut()'>Sign out</a>"); 
-	updateTable();
-  	}
-	});
-	console.log("Logged in: " + loggedIn);
+		db.getSession(function (err, response) {
+		if (err) {
+			console.log("error");		
+			console.log(err);		
+		} else if (!response.userCtx.name) {
+			console.log("Not logged in");
+		} else {
+		// response.userCtx.name is the current user
+			console.log("current user: " +  response.userCtx.name );
+			 loggedIn = true;
+			$('#loginForm').html("<a href='/'  id='signOut' class='btn btn-success'  onClick='signOut()'>Sign out</a>"); 
+			updateTable();
+			updateLatestWeight();
+			weightGraph();
+		}
+		});
+	}
 }
 
 
-isLoggedIn()
+initDb()
 
+
+function weightGraph() {
+if (dataCurrentWeight.lenght == 0 ) { return }
+
+c3.generate({
+	 size: {
+	        height: smallSize
+	    },
+   bindto: '#last5',
+   data: {
+       x: 'monthYear',
+       json: dataCurrentWeight,
+       axes: {
+   		weight: 'y',
+        
+       },
+       keys: {
+         x: 'date', // it's possible to specify 'x' when category axis
+         value: [ 'value', ],
+     }
+ },
+	axis: {
+	    x: {
+	        label: 'Date',
+	        type: 'category',
+	        tick: {
+	            format: '%Y-%m-%d %H:%M'
+	       }
+	    },
+	    y: {
+	        label: 'Current Weight',
+	    }
+	}
+});
+}
+
+function updateLatestWeight() {
+	console.log("updateLatestWeight");
+        db.query('weight/weight-view-index', {
+         reduce: false,
+         descending: true ,
+         limit: 1
+        }).then(function (res) {
+		console.log("current weight");
+                 $.each( res.rows, function(key, row  ) {
+		    $("#current_weight").html(row.value.toFixed(2) +"lbs");
+		       });
+        }).catch(function (err) {
+	console.log("Error");
+	console.log(err);
+});
+
+
+}
+	
