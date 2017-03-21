@@ -39,15 +39,14 @@ function updateTable() {
 	    }],
 	    data: tableData
 	});
-
-	}).caCookietch(function (err) {
-		console.log(err);
-	});
+	}).catch(function (err) {	
+  		console.log(err);
+  	});
 
 }
 
 $('#signOut').click( function () {
-	db  = null;
+	console.log("here");
  	$('#table').html();
 	return false;
 });
@@ -69,38 +68,44 @@ $('#loginSubmit').click( function () {
 	  password: loginForm.password.value 
 	};
 
-/*
-  $.ajax({
-    url : 'https://data.schappet.com/_session',
-    contentType : "application/x-www-form-urlencoded", 
-    type : 'POST',
-    crossdomain: true,
-xhrFields: { withCredentials: true },
-    data : 'name='+ user.name + '&password=' + user.password ,
-    success: function(data, status, xhr) {
-        console.log("Cookie: " + xhr.getResponseHeader("set-cookie"));
-        console.log("Headers: " + xhr.getAllResponseHeaders());
-
-	console.log(data);
-	console.log(data.ok);
-	
-	},
-    error: function(err) {
-	console.log(err);
-  }
-
-  });
-*/
-
 	var remoteDbUrl = 'https://data.schappet.com/userdb-' + hexVal;
 	console.log(remoteDbUrl);
 	db = new PouchDB(remoteDbUrl, {skipSetup: true}); //, {
 	db.login(user.name, user.password).then(function (userInfo) {
   		console.log(userInfo);
+		$.cookie('remoteDb',remoteDbUrl);
 	});
 
   	updateTable();
 
-	$('#loginForm').html("<button id='signOut' class='btn btn-success'>Sign out</button>");
+	$('#loginForm').html("<a href='#' id='signOut' class='btn btn-success'>Sign out</a>");
 	return false;
 });
+
+
+function isLoggedIn() {
+	var remoteDbUrl = $.cookie('remoteDb');
+     	console.log(remoteDbUrl);	
+ 	db = new PouchDB(remoteDbUrl, {skipSetup: true});
+	var loggedIn = false;
+	
+	db.getSession(function (err, response) {
+  	if (err) {
+  		console.log("error");		
+  		console.log(err);		
+	} else if (!response.userCtx.name) {
+		console.log("Not logged in");
+  	} else {
+    	// response.userCtx.name is the current user
+	console.log("current user: " +  response.userCtx.name );
+	 loggedIn = true;
+        $('#loginForm').html("<a href='#'  id='signOut' class='btn btn-success'>Sign out</a>"); 
+	updateTable();
+  	}
+	});
+	console.log("Logged in: " + loggedIn);
+}
+
+
+isLoggedIn()
+
