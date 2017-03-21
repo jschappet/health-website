@@ -40,7 +40,7 @@ function updateTable() {
 	    data: tableData
 	});
 
-	}).catch(function (err) {
+	}).caCookietch(function (err) {
 		console.log(err);
 	});
 
@@ -69,36 +69,36 @@ $('#loginSubmit').click( function () {
 	  password: loginForm.password.value 
 	};
 
-
+/*
   $.ajax({
     url : 'https://data.schappet.com/_session',
     contentType : "application/x-www-form-urlencoded", 
     type : 'POST',
+    crossdomain: true,
+xhrFields: { withCredentials: true },
     data : 'name='+ user.name + '&password=' + user.password ,
-    success : function(resp) { 
-		console.log(resp);
+    success: function(data, status, xhr) {
+        console.log("Cookie: " + xhr.getResponseHeader("set-cookie"));
+        console.log("Headers: " + xhr.getAllResponseHeaders());
+
+	console.log(data);
+	console.log(data.ok);
+	
 	},
     error: function(err) {
 	console.log(err);
   }
 
   });
+*/
 
-	var removeDbUrl = 'https://data.schappet.com/userdb-' + hexVal;
-	console.log(removeDbUrl);
-	db = new PouchDB(removeDbUrl, {
-	  ajax: {
-	    cache: false,
-	    timeout: 10000,
-	    headers: {
-		'Authorization': 'Basic ' + window.btoa(user.name + ':' + user.password)
-	    },
-	  },
-	  auth: {
-	    username: user.name,
-	    password: user.password
-	  }
+	var remoteDbUrl = 'https://data.schappet.com/userdb-' + hexVal;
+	console.log(remoteDbUrl);
+	db = new PouchDB(remoteDbUrl, {skipSetup: true}); //, {
+	db.login(user.name, user.password).then(function (userInfo) {
+  		console.log(userInfo);
 	});
+
   	updateTable();
 
 	$('#loginForm').html("<button id='signOut' class='btn btn-success'>Sign out</button>");
