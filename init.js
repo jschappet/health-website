@@ -2,7 +2,6 @@
 var dataCurrentWeight = [];
 var db ;
 var tableData = [];
-var vitals = [];
 
 
 var size = 250;
@@ -10,21 +9,45 @@ var size = 250;
 var smallSize = (size * .50);
 
 function updateVitals(year) {
+	var data=[];
         db.query('vitals/vitals-per-month', {
          startkey: year+"-" ,
          endkey: year+"-\uffff" 
         }).then(function (res) {
                  $.each( res.rows, function(key, row  ) {
-                   vitals.push({
-                            "id": row.id,
-                            "sys": row.value.systolic,
-                            "dia": row.value.diatolic
+                   data.push({
+                            "key": row.key,
+                            "systolic": row.value.systolic,
+                            "diatolic": row.value.diatolic
                         });
+		});
+		console.log(data);
+		vitalsGraph(data);
 
-                });
 	});
 }
 
+var vitalsGrph ;
+
+function vitalsGraph(vitalsData) {
+
+	console.log("Graphing vitals");
+        vitalsGrp =  c3.generate({
+         size: {
+                height: size
+            },
+          bindto: '#myVitalsGraph',
+          data: {
+              json: vitalsData,
+              keys: {
+                 x: 'systolic',
+                 value: ['diatolic'],
+                },
+               type: 'scatter',
+           }
+       });
+	console.log("done with graph");
+}
 
 function updateTable() {
 
@@ -100,6 +123,7 @@ function initDisplay() {
   	updateTable();
 	updateLatestWeight(); 
 	weightGraph();
+	updateVitals("2017");
 	$('#loginForm').html("<a href='/' id='signOut' class='btn btn-success' onClick='signOut()'>Sign out</a>");
 	
 }
@@ -117,6 +141,7 @@ $('#loginSubmit').click( function () {
 	db.login(user.name, user.password).then(function (userInfo) {
   		console.log(userInfo);
 		Cookies.set('remoteDb',remoteDbUrl);
+                initDisplay();
 	});
 
 	return false;
@@ -147,7 +172,7 @@ function initDb() {
 }
 
 
-initDb()
+initDb();
 
 
 function weightGraph() {
@@ -216,6 +241,9 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   var target = $(e.target).attr("href") // activated tab
   $(target).addClass("active");
   $(target).addClass("in");
+  if (target==='#vitals') {
+	vitalsGrp.show();
+  } 
   
 });
 
