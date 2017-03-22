@@ -25,6 +25,7 @@
     "js-cookie": "^2.1.3",
     "pouchdb-authentication": "^0.5.5",
     "c3": "~0.4.11",
-    "pouchdb": "^6.1.2"
+    "pouchdb": "^6.1.2",
+    "bootstrap-slider": "*"
   }
 }

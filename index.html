@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/local.css">
 	<link rel="stylesheet" href="bower_components/bootstrap-table/dist/bootstrap-table.min.css">
+	<link rel="stylesheet" href="bower_components/bootstrap-slider/slider.css">
 	<!-- Load c3.css -->
 	<link href="bower_components/c3/c3.min.css" rel="stylesheet" type="text/css">
 
@@ -20,6 +21,7 @@
 	<script src="bower_components/pouchdb/dist/pouchdb.min.js"></script>
 	<script src="bower_components/pouchdb-authentication/dist/pouchdb.authentication.min.js"></script>
 	<script src="bower_components/js-cookie/src/js.cookie.js"></script>
+	<script src="bower_components/bootstrap-slider/bootstrap-slider.js"></script>
 
 	<!-- Load d3.js and c3.js -->
 	<script src="bower_components/d3/d3.min.js"></script> 
@@ -73,7 +75,7 @@
       <a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a>
     </li>
     <li role="presentation">
-      <a href="#settings" aria-controls="vitals" role="tab" data-toggle="tab">Vitals</a>
+      <a href="#vitals" aria-controls="vitals" role="tab" data-toggle="tab">Vitals</a>
     </li>
   </ul>
 
@@ -81,7 +83,6 @@
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="home">
 
-        <div id="myVitalsGraph"></div>
 
         <h1>Heath Summary</h1>
         <p>Below is a summary of the last 15 weeks. Average Weight, Blood Pressure, and Heart Rate, and Total Steps</p>
@@ -96,6 +97,9 @@
     <div role="tabpanel" class="tab-pane fade" id="weight">Content Weight</div>
     <div role="tabpanel" class="tab-pane fade" id="messages">Content Messages</div>
     <div role="tabpanel" class="tab-pane fade" id="vitals">
+	<div id="vitalsYearLabel">Select Year: <span id="vitalsYearVal">2017</span></div>
+	<input id="vitalsYearSlider" type="text" data-slider-min="2011" data-slider-max="2017" data-slider-step="1" data-slider-value="2017"/>
+        <div id="myVitalsGraph"></div>
     </div>
   </div>
 

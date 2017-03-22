@@ -17,7 +17,7 @@ function updateVitals(year) {
                  $.each( res.rows, function(key, row  ) {
                    data.push({
                             "key": row.key,
-                            "systolic": row.value.systolic,
+                            "bp": row.value.systolic,
                             "diatolic": row.value.diatolic
                         });
 		});
@@ -31,7 +31,6 @@ var vitalsGrph ;
 
 function vitalsGraph(vitalsData) {
 
-	console.log("Graphing vitals");
         vitalsGrp =  c3.generate({
          size: {
                 height: size
@@ -40,13 +39,28 @@ function vitalsGraph(vitalsData) {
           data: {
               json: vitalsData,
               keys: {
-                 x: 'systolic',
-                 value: ['diatolic'],
+                 x: 'diatolic',
+                 value: ['bp'],
                 },
                type: 'scatter',
-           }
+           },
+    	axis: {
+	  x: {
+            label: 'diatolic (mmHg)',
+            max: 110,
+            min: 65,
+            // Range includes padding, set 0 if no padding needed
+            // padding: {top:0, bottom:0}
+        },
+        y: {
+            label: 'systolic (mmHg)',
+            max: 160,
+            min: 110,
+            // Range includes padding, set 0 if no padding needed
+            // padding: {top:0, bottom:0}
+        }
+	}	
        });
-	console.log("done with graph");
 }
 
 function updateTable() {
@@ -96,12 +110,12 @@ function updateTable() {
 }
 
 function signOut() {
+	Cookies.remove('remoteDb');
 	var logout = db.logout(function (err, response) {
 	if (err) {
 		console.log(err);
 	}	else {	
 		console.log(response.ok);
-		Cookies.remove('remoteDb');
  		$('#table').html('');
 		location.reload();
 	}
@@ -123,10 +137,21 @@ function initDisplay() {
   	updateTable();
 	updateLatestWeight(); 
 	weightGraph();
-	updateVitals("2017");
+	updateVitals(new Date().getFullYear());
 	$('#loginForm').html("<a href='/' id='signOut' class='btn btn-success' onClick='signOut()'>Sign out</a>");
 	
 }
+
+
+// With JQuery
+$("#vitalsYearSlider").slider();
+$("#vitalsYearSlider").on("slide", function(slideEvt) {
+	$("#vitalsYearVal").text(slideEvt.value);
+        updateVitals(slideEvt.value);
+});
+
+
+
 
 $('#loginSubmit').click( function () {
 	var hexVal =  string2Hex(loginForm.user.value);
@@ -242,7 +267,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   $(target).addClass("active");
   $(target).addClass("in");
   if (target==='#vitals') {
-	vitalsGrp.show();
+	//updateVitals("2017");
   } 
   
 });

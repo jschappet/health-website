@@ -6,3 +6,14 @@
     display:block;
 }
 
+
+.c3-region.high {
+  fill: red;
+}
+.c3-region.normal {
+  fill: green;
+}
+
+#vitalsYearSlider .slider-selection {
+	background: #BABABA;
+}
