@@ -22,9 +22,7 @@
 	<script src="bower_components/pouchdb-authentication/dist/pouchdb.authentication.min.js"></script>
 	<script src="bower_components/js-cookie/src/js.cookie.js"></script>
 	<script src="bower_components/bootstrap-slider/bootstrap-slider.js"></script>
-	<script src="bower_components/uuid/uuid.js"></script>
  	<script src="weight.js"></script> 
- 	<script src="vitals.js"></script> 
 
 	<!-- Load d3.js and c3.js -->
 	<script src="bower_components/d3/d3.min.js"></script> 
@@ -69,16 +67,16 @@
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active">
-      <a href="#homeTab" aria-controls="homeTab" role="tab" data-toggle="tab">Health Summary</a>
+      <a href="#homeTab" aria-controls="home" role="tab" data-toggle="tab">Health Summary</a>
     </li>
     <li role="presentation">
-      <a href="#weightTab" aria-controls="weightTab" role="tab" data-toggle="tab">Weight</a>
+      <a href="#weightTab" aria-controls="profile" role="tab" data-toggle="tab">Weight</a>
     </li>
     <li role="presentation">
-      <a href="#messagesTab" aria-controls="messagesTab" role="tab" data-toggle="tab">Messages</a>
+      <a href="#messagesTab" aria-controls="messages" role="tab" data-toggle="tab">Messages</a>
     </li>
     <li role="presentation">
-      <a href="#vitalsTab" aria-controls="vitalsTab" role="tab" data-toggle="tab">Vitals</a>
+      <a href="#vitalsTab" aria-controls="vitals" role="tab" data-toggle="tab">Vitals</a>
     </li>
   </ul>
 
@@ -89,29 +87,26 @@
         <p>Below is a summary of the last 15 weeks. Average Weight, Blood Pressure, and Heart Rate, and Total Steps</p>
         <h3>Weight Last 15 Weeks</h3>
         <div id="last5"></div>
-	<table id="table"></table>
+        <table id="table"></table>
     </div>
 
     <div role="tabpanel" class="tab-pane fade" id="weightTab">
-      <div>
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#weightModal">Record Weight</button>
-	<table id="weightTable"></table> 
-      </div>
+ 	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#weightModal">Record Weight</button>
+ 	<table id="weightTable"></table> 
     </div>
-
-	    <div role="tabpanel" class="tab-pane fade" id="messagesTab">
-		Content Messages
-	    </div>
+    <div role="tabpanel" class="tab-pane fade" id="messagesTab">
+	Content Messages
     </div>
-      <div role="tabpanel" class="tab-pane fade" id="vitalsTab">
+    <div role="tabpanel" class="tab-pane fade" id="vitalsTab">
 	<div id="vitalsYearLabel">Select Year: <span id="vitalsYearVal">2017</span></div>
-	<input id="vitalsYearSlider" type="text" data-slider-min="2011" data-slider-max="2017" data-slider-step="1" data-slider-value="2017"/>
+	2011	<input id="vitalsYearSlider" type="text" data-slider-min="2011"
+		data-slider-max="2017" data-slider-step="1" 
+		data-slider-value="2017"/> &nbsp;2017
         <div id="myVitalsGraph"></div>
     </div>
   </div>
 
 </div>
-
 
 
 

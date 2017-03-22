@@ -1,70 +1,16 @@
 
 var dataCurrentWeight = [];
 var db ;
-var tableData = [];
+//var tableData = [];
 
 
 var size = 250;
 
 var smallSize = (size * .50);
 
-function updateVitals(year) {
-	var data=[];
-        db.query('vitals/vitals-per-month', {
-         startkey: year+"-" ,
-         endkey: year+"-\uffff" 
-        }).then(function (res) {
-                 $.each( res.rows, function(key, row  ) {
-                   data.push({
-                            "key": row.key,
-                            "bp": row.value.systolic,
-                            "diatolic": row.value.diatolic
-                        });
-		});
-		console.log(data);
-		vitalsGraph(data);
-
-	});
-}
-
-var vitalsGrph ;
-
-function vitalsGraph(vitalsData) {
-
-        vitalsGrp =  c3.generate({
-         size: {
-                height: size
-            },
-          bindto: '#myVitalsGraph',
-          data: {
-              json: vitalsData,
-              keys: {
-                 x: 'diatolic',
-                 value: ['bp'],
-                },
-               type: 'scatter',
-           },
-    	axis: {
-	  x: {
-            label: 'diatolic (mmHg)',
-            max: 110,
-            min: 65,
-            // Range includes padding, set 0 if no padding needed
-            // padding: {top:0, bottom:0}
-        },
-        y: {
-            label: 'systolic (mmHg)',
-            max: 160,
-            min: 110,
-            // Range includes padding, set 0 if no padding needed
-            // padding: {top:0, bottom:0}
-        }
-	}	
-       });
-}
 
 function updateTable() {
-
+	var tableData = [] ;
 	db.query('combinedView/combined-view-index', {
 	 reduce: true,
 	 descending: true ,
@@ -139,11 +85,11 @@ function initDisplay() {
 	weightGraph();
 	updateVitals(new Date().getFullYear());
 	$('#loginForm').html("<a href='/' id='signOut' class='btn btn-success' onClick='signOut()'>Sign out</a>");
+	updateWeightTable("2017", "2017-12-12\ufffff", 15);
 	
 }
 
 
-// With JQuery
 $("#vitalsYearSlider").slider();
 $("#vitalsYearSlider").on("slide", function(slideEvt) {
 	$("#vitalsYearVal").text(slideEvt.value);
@@ -200,61 +146,7 @@ function initDb() {
 initDb();
 
 
-function weightGraph() {
-  if (dataCurrentWeight.lenght == 0 ) { return }
-
-  c3.generate({
-	 size: {
-	        height: smallSize
-	    },
-    bindto: '#last5',
-    data: {
-       x: 'monthYear',
-       json: dataCurrentWeight,
-       axes: {
-   		weight: 'y',
-        
-       },
-       keys: {
-         x: 'date', // it's possible to specify 'x' when category axis
-         value: [ 'value', ],
-     }
-  },
-	axis: {
-	    x: {
-	        label: 'Date',
-	        type: 'category',
-	        tick: {
-	            format: '%Y-%m-%d %H:%M'
-	       }
-	    },
-	    y: {
-	        label: 'Current Weight',
-	    }
-	}
- });
-}
-
-function updateLatestWeight() {
-	console.log("updateLatestWeight");
-        db.query('weight/weight-view-index', {
-         reduce: false,
-         descending: true ,
-         limit: 1
-        }).then(function (res) {
-		console.log("current weight");
-                 $.each( res.rows, function(key, row  ) {
-		    $("#current_weight").html(row.value.toFixed(2) +"lbs");
-		       });
-        }).catch(function (err) {
-	console.log("Error");
-	console.log(err);
-});
-
-
-}
-
-var tablist = ["#home","#weight", "#messages","#vitals"];
+var tablist = ["#home","#weightTab", "#messagesTab","#vitalsTab"];
 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   $.each(tablist, function (item) {
@@ -266,10 +158,11 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   var target = $(e.target).attr("href") // activated tab
   $(target).addClass("active");
   $(target).addClass("in");
-  if (target==='#vitals') {
-	//updateVitals("2017");
-  } 
   
 });
 
 	
+
+ $('#addWeightButton').click( function () {
+	 $('#weightModal').show();
+ });
