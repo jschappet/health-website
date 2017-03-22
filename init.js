@@ -166,3 +166,16 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
  $('#addWeightButton').click( function () {
 	 $('#weightModal').show();
  });
+
+
+
+ $('#saveWeightBtn').click( function () {
+	
+	if(saveWeight($('#weightVal').val(), new Date())) {
+		$('#weightModal').modal('hide');
+	} else {
+		
+		$('#weightVal').val(0);
+	}
+	
+ });

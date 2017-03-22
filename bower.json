@@ -27,6 +27,7 @@
     "c3": "~0.4.11",
     "pouchdb": "^6.1.2",
     "bootstrap-slider": "*",
-    "uuid": "^2.0.2"
+    "uuid": "^2.0.2",
+    "simple-uuid": "^1.0.1"
   }
 }
