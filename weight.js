@@ -1,3 +1,10 @@
+function weightActionFormatter(value) {
+    return [
+      '<a class="update" href="javascript:" title="Update Item"><i class="glyphicon glyphicon-edit"></i></a>',
+      '<a class="remove" href="javascript:" title="Delete Item"><i class="glyphicon glyphicon-remove-circle"></i></a>',
+    ].join('');
+}
+
 
 function updateWeightTable(startkey, endkey, limit) {
 	
@@ -128,3 +135,27 @@ function saveWeight(inputValue, date) {
 	return true;
 
 }
+
+
+
+    // update and delete events
+    weightActionEvents = {
+        'click .update': function (e, value, row) {
+            showModal($(this).attr('title'), row);
+        },
+        'click .remove': function (e, value, row) {
+            if (confirm('Are you sure to delete this item?')) {
+                $.ajax({
+                    url: API_URL + row.id,
+                    type: 'delete',
+                    success: function () {
+                        $table.bootstrapTable('refresh');
+                        showAlert('Delete item successful!', 'success');
+                    },
+                    error: function () {
+                        showAlert('Delete item error!', 'danger');
+                    }
+                })
+            }
+        }
+    };

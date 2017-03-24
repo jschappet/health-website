@@ -53,8 +53,13 @@ function vitalsGraph(vitalsData) {
             min: 110,
             // Range includes padding, set 0 if no padding needed
             // padding: {top:0, bottom:0}
-        }
-        }
-       });
+        },
+    },
+	regions: [
+        {axis: 'x', start:0, end: 80, class: 'normal'},
+        {axis: 'y', start: 0, end: 120, class: 'normal'},
+	]
+
+  });
 }
 

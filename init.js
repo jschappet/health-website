@@ -80,10 +80,13 @@ function string2Hex(tmp) {
 
 
 function initDisplay() {
+	var currentDate = new Date();
+	var hrKey = [ currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate()];
   	updateTable();
 	updateLatestWeight(); 
 	weightGraph();
-	updateVitals(new Date().getFullYear());
+	updateVitals(currentDate.getFullYear());
+	updateHr(hrKey);
 	$('#loginForm').html("<a href='/' id='signOut' class='btn btn-success' onClick='signOut()'>Sign out</a>");
 	updateWeightTable("2017", "2017-12-12\ufffff", 15);
 	
@@ -146,7 +149,7 @@ function initDb() {
 initDb();
 
 
-var tablist = ["#home","#weightTab", "#messagesTab","#vitalsTab"];
+var tablist = ["#homeTab","#weightTab", "#messagesTab","#hrTab","#vitalsTab"];
 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   $.each(tablist, function (item) {
@@ -179,3 +182,28 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	}
 	
  });
+
+
+ $('#hrDateSelect').change( function () {
+	var selectDate = new Date($('#hrDateSelect').val());
+	console.log(selectDate);
+        var hrKey = [ selectDate.getFullYear(),selectDate.getMonth(),selectDate.getDate()];
+        updateHr(hrKey);
+ });
+
+
+/*
+var changes = db.changes({
+  since: 'now',
+  live: true,
+  include_docs: true
+}).on('change', function(change) {
+  
+initDisplay();
+  // handle change
+}).on('complete', function(info) {
+  // changes() was canceled
+}).on('error', function (err) {
+  console.log(err);
+});
+*/

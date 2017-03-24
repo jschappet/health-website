@@ -26,6 +26,7 @@
 
  	<script src="weight.js"></script> 
  	<script src="vitals.js"></script> 
+ 	<script src="hr.js"></script> 
 
 	<!-- Load d3.js and c3.js -->
 	<script src="bower_components/d3/d3.min.js"></script> 
@@ -79,6 +80,9 @@
       <a href="#messagesTab" aria-controls="messagesTab" role="tab" data-toggle="tab">Messages</a>
     </li>
     <li role="presentation">
+      <a href="#hrTab" aria-controls="hrTab" role="tab" data-toggle="tab">Heart Rate</a>
+    </li>
+    <li role="presentation">
       <a href="#vitalsTab" aria-controls="vitalsTab" role="tab" data-toggle="tab">Vitals</a>
     </li>
   </ul>
@@ -96,13 +100,36 @@
     <div role="tabpanel" class="tab-pane fade" id="weightTab">
       <div>
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#weightModal">Record Weight</button>
-	<table id="weightTable"></table> 
+        <table id="weightTable"
+               data-show-refresh="true"
+               data-show-columns="true"
+               data-search="true"
+               data-query-params="queryParams"
+               data-toolbar=".toolbar">
+            <thead>
+            <tr>
+                <th data-field="date">Date</th>
+                <th data-field="weight">Weight</th>
+                <th data-field="source">Source</th>
+                <th data-field="action"
+                    data-align="right"
+                    data-formatter="weightActionFormatter"
+                    data-events="weightActionEvents">Action</th>
+            </tr>
+            </thead>
+        </table>
+	<!-- <table id="weightTable"></table>  -->
       </div>
     </div>
 
 	    <div role="tabpanel" class="tab-pane fade" id="messagesTab">
 		Content Messages
 	    </div>
+
+            <div role="tabpanel" class="tab-pane fade" id="hrTab">
+        <div id="myHrGraph"></div>
+	<input id="hrDateSelect" type="date" />
+            </div>
     </div>
       <div role="tabpanel" class="tab-pane fade" id="vitalsTab">
 	<div id="vitalsYearLabel">Select Year: <span id="vitalsYearVal">2017</span></div>
