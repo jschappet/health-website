@@ -45,10 +45,8 @@
           </button>
           <a class="navbar-brand" href="#">Health Data</a>
 	</div>
-        <div id="navbar" class="navbar-collapse collapse">
-           <ul class="nav navbar-nav">
-		<li><span id="current_weight">loading</span></li>
-	   </ul>
+        <div class="navbar-header">
+	</div>
           <form class="navbar-form navbar-right" name="loginForm" id="loginForm">
             <div class="form-group">
               <input id="user" name="user" type="text" placeholder="Username" class="form-control">
@@ -91,6 +89,7 @@
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="homeTab">
         <h1>Health Summary</h1>
+		<p>Latest Weigh-in: <span id="current_weight">loading</span></p>
         <p>Below is a summary of the last 15 weeks. Average Weight, Blood Pressure, and Heart Rate, and Total Steps</p>
         <h3>Weight Last 15 Weeks</h3>
         <div id="last5"></div>

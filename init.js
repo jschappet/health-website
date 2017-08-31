@@ -111,7 +111,7 @@ $('#loginSubmit').click( function () {
 
 	var remoteDbUrl = 'https://data.schappet.com/userdb-' + hexVal;
 	console.log(remoteDbUrl);
-	db = new PouchDB(remoteDbUrl, {skipSetup: true}); //, {
+	db = new PouchDB(remoteDbUrl, {skipSetup: true}); 
 	db.login(user.name, user.password).then(function (userInfo) {
   		console.log(userInfo);
 		Cookies.set('remoteDb',remoteDbUrl);
